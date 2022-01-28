@@ -1,0 +1,14 @@
+﻿@*@model string*@
+@model IndexViewModel
+@inject IShortStringService shortString
+<div class="alert alert-dark">
+    @Model.Name
+</div>
+
+<table bootstrap-table>
+    @for (int i = 0; i < 5; i++)
+    {
+        <tr><td>@i from partial</td></tr>
+        <tr><td>@shortString.GetShort(Model.Description, 20)</td></tr>
+    }
+</table>

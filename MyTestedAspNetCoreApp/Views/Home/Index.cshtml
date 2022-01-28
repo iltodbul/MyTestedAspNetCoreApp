@@ -1,0 +1,56 @@
+﻿@using MyTestedAspNetCoreApp.ViewModel.Home
+@using MyTestedAspNetCoreApp.Services
+@model IndexViewModel
+@inject IShortStringService ShortString
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+@*@await Html.PartialAsync("_HomePageStart")*@
+
+<partial name="_HomePageStart" />
+
+<div class="text-center">
+    @if (this.User.Identity.IsAuthenticated)
+    {
+        <h1 class="display-4">Welcome, @Model.Name</h1>
+
+    }
+    else
+    {
+        <h1 class="display-4">Welcome, Anonymous</h1>
+    }
+    <h2>Is @Model.Year year</h2>
+    <p>@ShortString.GetShort(Model.Description, 30)</p>
+    <p> We have @Model.ProcessorCount processors in this PC</p>
+    <p> We have @Model.UsersCount users in the DB</p>
+    <p> User id is @Model.Id</p>
+
+    
+    <form asp-action="Index">
+        <textarea asp-for="Description"></textarea>
+        <label for="year">Year: </label>
+        <input id="year" asp-for="Year"/>
+        <input type="submit" name="Submit" value="Submit"/>
+    </form>
+</div>
+<!--Comment-->
+<p class="display-4">&ETH;  &Sigma;  &lt;string&gt;</p>
+
+
+<table bootstrap-table="" table-name="Digits">
+    @for (int i = 0; i < 10; i++)
+    {
+        <tr><td>@i</td></tr>
+        
+    }
+</table>
+
+
+
+@section Links {
+    <li class="nav-item">
+        <a class="nav-link text-dark" href="https://bing.com">Bing</a>
+    </li>
+}
