@@ -1,12 +1,14 @@
-﻿@*@model string*@
+﻿@using MyTestedAspNetCoreApp.ViewModel.Home
+@using MyTestedAspNetCoreApp.Services
 @model IndexViewModel
 @inject IShortStringService shortString
+
 <div class="alert alert-dark">
     @Model.Name
 </div>
 
 <table bootstrap-table>
-    @for (int i = 0; i < 5; i++)
+    @for (int i = 1; i <= 3; i++)
     {
         <tr><td>@i from partial</td></tr>
         <tr><td>@shortString.GetShort(Model.Description, 20)</td></tr>

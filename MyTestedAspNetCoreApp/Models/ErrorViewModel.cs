@@ -1,3 +1,5 @@
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+
 namespace MyTestedAspNetCoreApp.Models
 {
     using System;
@@ -7,5 +9,6 @@ namespace MyTestedAspNetCoreApp.Models
         public string RequestId { get; set; }
 
         public bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
+
     }
 }

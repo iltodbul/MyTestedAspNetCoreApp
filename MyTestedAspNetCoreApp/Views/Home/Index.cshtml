@@ -1,15 +1,28 @@
 ﻿@using MyTestedAspNetCoreApp.ViewModel.Home
 @using MyTestedAspNetCoreApp.Services
+@using Microsoft.Extensions.Configuration
+@using Microsoft.Extensions.Options
 @model IndexViewModel
 @inject IShortStringService ShortString
+@inject IConfiguration Configuration
+@inject IOptions<ErrorViewModel> Options
 
 @{
     ViewData["Title"] = "Home Page";
 }
 
+<h2>@this.Configuration["HalloMessage"]</h2>
+<h4>@this.Configuration["ConnectionStrings:DefaultConnection"]</h4>
+@{
+    var test = this.Options.Value;
+}
+<h1>This is from option value: @test.RequestId and @test.ShowRequestId</h1>
+
+
 @*@await Html.PartialAsync("_HomePageStart")*@
 
 <partial name="_HomePageStart" />
+
 
 <div class="text-center">
     @if (this.User.Identity.IsAuthenticated)
@@ -27,12 +40,12 @@
     <p> We have @Model.UsersCount users in the DB</p>
     <p> User id is @Model.Id</p>
 
-    
+
     <form asp-action="Index">
         <textarea asp-for="Description"></textarea>
         <label for="year">Year: </label>
-        <input id="year" asp-for="Year"/>
-        <input type="submit" name="Submit" value="Submit"/>
+        <input id="year" asp-for="Year" />
+        <input type="submit" name="Submit" value="Submit" />
     </form>
 </div>
 <!--Comment-->
@@ -43,7 +56,7 @@
     @for (int i = 0; i < 10; i++)
     {
         <tr><td>@i</td></tr>
-        
+
     }
 </table>
 

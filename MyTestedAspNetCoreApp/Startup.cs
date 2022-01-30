@@ -1,4 +1,6 @@
 using MyTestedAspNetCoreApp.Services;
+using MyTestedAspNetCoreApp.Services.CustomMiddleware;
+using MyTestedAspNetCoreApp.Services.Filters;
 
 namespace MyTestedAspNetCoreApp
 {
@@ -36,7 +38,18 @@ namespace MyTestedAspNetCoreApp
 
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
-            services.AddControllersWithViews();
+            services.AddControllersWithViews(configure =>
+            {
+                //global registration :
+                configure.Filters.Add(new MyAuthFilter());
+                configure.Filters.Add(new MyResourceFilter());
+                configure.Filters.Add(new MyResourceFilter());
+                configure.Filters.Add(new MyAddHeaderActionFilterAttribute());
+                configure.Filters.Add(new MyExceptionFilter());
+                configure.Filters.Add(new MyResultFilterAttribute());
+
+                // or local registration with attribute in the concrete controller or only in concrete action. In dis case in InfoController.
+            });
             services.AddRazorPages();
             services.AddTransient<IShortStringService, ShortStringService>();
         }
@@ -44,8 +57,17 @@ namespace MyTestedAspNetCoreApp
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            // example Map() middleware
+            app.Map("/test-map-middleware", app =>
+            {
+                app.UseWelcomePage();
+            });
+
+            app.UseMyMiddleware();
+
             if (env.IsDevelopment())
             {
+                app.UseStatusCodePagesWithRedirects("/Home/StatusCodeError?errorCode={0}");
                 app.UseDeveloperExceptionPage();
                 app.UseMigrationsEndPoint();
             }

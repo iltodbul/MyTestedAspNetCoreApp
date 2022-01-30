@@ -1,4 +1,7 @@
-﻿using MyTestedAspNetCoreApp.Data;
+﻿using System.Data;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
+using MyTestedAspNetCoreApp.Data;
 using MyTestedAspNetCoreApp.Services;
 using MyTestedAspNetCoreApp.ViewModel.Home;
 
@@ -15,18 +18,27 @@ namespace MyTestedAspNetCoreApp.Controllers
 
     public class HomeController : Controller
     {
+        private static string description =
+            "A ready-to-use template for ASP.NET Core with repositories, services, models mapping, DI and StyleCop warnings fixed.";
+
         private readonly ILogger<HomeController> _logger;
         private readonly ApplicationDbContext _db;
         private readonly IShortStringService _shortStringService;
+        private readonly IConfiguration _configuration;
+        private readonly IOptions<ErrorViewModel> _options;
 
         public HomeController(
             ILogger<HomeController> logger, 
             ApplicationDbContext db,
-            IShortStringService shortStringService)
+            IShortStringService shortStringService,
+            IConfiguration configuration,
+            IOptions<ErrorViewModel> options)
         {
             _logger = logger;
             _db = db;
             _shortStringService = shortStringService;
+            _configuration = configuration;
+            _options = options;
         }
 
         public IActionResult Index(int id)
@@ -36,7 +48,7 @@ namespace MyTestedAspNetCoreApp.Controllers
 
             var viewModel = new IndexViewModel()
             {
-                Description = "A ready-to-use template for ASP.NET Core with repositories, services, models mapping, DI and StyleCop warnings fixed.",
+                Description = description,
                 UsersCount = usersCount,
                 ProcessorCount = Environment.ProcessorCount,
                 Name = userName,
@@ -49,7 +61,20 @@ namespace MyTestedAspNetCoreApp.Controllers
 
         public IActionResult Privacy()
         {
-            return View();
+            var viewModel = new IndexViewModel
+            {
+                Description = description,
+                Name = "Name of IndexViewModel",
+            };
+
+            return View(viewModel);
+        }
+
+        public IActionResult Exception() => throw new Exception();
+
+        public IActionResult StatusCodeError(int errorCode)
+        {
+            return this.View();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
