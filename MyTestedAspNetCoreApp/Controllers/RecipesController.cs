@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.IO;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using MyTestedAspNetCoreApp.Models;
 using MyTestedAspNetCoreApp.ViewModel.Home.ViewComponents;
 using MyTestedAspNetCoreApp.ViewModel.Recipes;
@@ -12,6 +14,13 @@ namespace MyTestedAspNetCoreApp.Controllers
 
     public class RecipesController : Controller
     {
+        private readonly IWebHostEnvironment _webHostEnvironment;
+
+        public RecipesController(IWebHostEnvironment webHostEnvironment)
+        {
+            _webHostEnvironment = webHostEnvironment;
+        }
+
         public IActionResult Add()
         {
             // default value for the form
@@ -30,7 +39,7 @@ namespace MyTestedAspNetCoreApp.Controllers
         }
 
         [HttpPost]
-        public IActionResult Add(AddRecipesInputModel model)
+        public async Task<IActionResult> Add(AddRecipesInputModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -38,6 +47,13 @@ namespace MyTestedAspNetCoreApp.Controllers
             }
 
             // TODO Save data in db
+
+            // запазване на файл в руут папката чрез стриим.
+            await using (FileStream fs = new FileStream(this._webHostEnvironment.WebRootPath + "/user.png", FileMode.Create))
+            {
+                await model.Image.CopyToAsync(fs);
+            }
+
             return this.RedirectToAction(nameof(ThankYou));
         }
 

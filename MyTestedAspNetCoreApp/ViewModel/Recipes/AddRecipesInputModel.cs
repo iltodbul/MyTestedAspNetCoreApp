@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Http;
 using MyTestedAspNetCoreApp.Models;
 using MyTestedAspNetCoreApp.ValidationAttributes;
 
@@ -31,6 +32,8 @@ namespace MyTestedAspNetCoreApp.ViewModel.Recipes
         public RecipeType Type { get; set; }
 
         public ICollection<string> Ingredients { get; set; }
+
+        public IFormFile Image { get; set; }
     }
 
     // Query string example: https://localhost:44392/Recipes/Add?year=2021&type=fastCook&name=Muska&description=Some%20description%20here&date=2022/6/23&ingredients=potatoes&ingredients=meat&time.cookingTime=60&time.PreparationTime=20
