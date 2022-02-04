@@ -1,0 +1,58 @@
+﻿@using MyTestedAspNetCoreApp.ViewModel.Recipes
+@model AddRecipesInputModel
+
+@{
+    ViewData["Title"] = "Add Recipes";
+}
+
+<h1>Add recipes</h1>
+
+<form method="post" class="col-md-6">
+    <div class="d-flex flex-column">
+        <div asp-validation-summary="All" class="text-danger"></div>
+
+        <div class="form-group">
+            <label asp-for="Name"></label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Description"></label>
+            <textarea rows="4" asp-for="Description" class="form-control"></textarea>
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Type"></label>
+            <select asp-for="Type" class="form-control" asp-items="@Html.GetEnumSelectList<RecipeType>()"></select>
+            <span asp-validation-for="Type" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Date"></label>
+            <input asp-for="Date" class="form-control" />
+            <span asp-validation-for="Date" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Year"></label>
+            <input asp-for="Year" class="form-control" />
+            <span asp-validation-for="Year" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Time.CookingTime"></label>
+            <input asp-for="Time.CookingTime" class="form-control" />
+            <span asp-validation-for="Time.CookingTime" class="text-danger"></span>
+        </div>
+
+        <input type="submit" class="btn btn-success" />
+    </div>
+</form>
+
+@*чрез този partial с name="_ValidationScriptsPartial" включваме скрипт, който не изпраща заявка до сървъра, ако формата не е попълнена правилно.*@
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using MyTestedAspNetCoreApp.ValidationAttributes;
 
 namespace MyTestedAspNetCoreApp.ViewModel.Home
 {
@@ -9,12 +10,16 @@ namespace MyTestedAspNetCoreApp.ViewModel.Home
 
     public class IndexViewModel
     {
+        [Required]
         [DataType(DataType.MultilineText)]
         public string Description { get; set; }
 
-        [MinLength(1900, ErrorMessage = "Year must be mor than 1900")]
+        //[Range(1900, 2022)]
+        [MinToCurrentYear(1900)] // custom validation attribute
         public int Year { get; set; }
 
+        [Required]
+        [MinLength(5)]
         public string Name { get; set; }
 
         public int UsersCount { get; set; }
