@@ -1,4 +1,6 @@
-﻿namespace MyTestedAspNetCoreApp.Data
+﻿using MyTestedAspNetCoreApp.Models;
+
+namespace MyTestedAspNetCoreApp.Data
 {
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;
@@ -12,5 +14,7 @@
             : base(options)
         {
         }
+
+        public DbSet<Product> Products { get; set; }
     }
 }

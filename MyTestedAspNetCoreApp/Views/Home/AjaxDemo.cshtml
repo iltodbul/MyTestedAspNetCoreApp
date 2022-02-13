@@ -1,0 +1,157 @@
+﻿
+@{
+    ViewData["Title"] = "AjaxDemo";
+}
+
+<h1>AjaxDemo</h1>
+
+<div id="container">
+    <table id="table" class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">First</th>
+                <th scope="col">Last</th>
+                <th scope="col">Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th scope="row">1</th>
+                <td id="name0">Mark</td>
+                <td>Otto</td>
+                <td id="date0">@DateTime.UtcNow.AddDays(-1).ToString("d")</td>
+            </tr>
+            <tr>
+                <th scope="row">2</th>
+                <td id="name1">Jacob</td>
+                <td>Thornton</td>
+                <td id="date1">@DateTime.UtcNow.AddDays(-1).ToString("d")</td>
+            </tr>
+            <tr>
+                <th scope="row">3</th>
+                <td id="name2">Larry</td>
+                <td>the Bird</td>
+                <td id="date2">@DateTime.UtcNow.AddDays(-1).ToString("d")</td>
+            </tr>
+        </tbody>
+    </table>
+    <div id="result"></div>
+</div>
+
+<button class="btn btn-success" onclick="RefreshData()">Refresh</button>
+<button class="btn btn-success" onclick="AddRows()">Add Rows</button>
+<button class="btn btn-danger" onclick="Clear()">Clear</button>
+<button class="btn btn-danger" onclick="GitHub()">Get data from GitHub</button>
+
+@section Scripts
+{
+    <script>
+        let index = 0;
+        let container = document.getElementById("container");
+
+        function RefreshData() {
+            let xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+                if (this.readyState === 4 && this.status === 200) {
+                    let data = JSON.parse(this.responseText);
+                    for (let i = 0; i < data.length; i++) {
+                        document.getElementById(`date${i}`).textContent = data[i].date;
+                        document.getElementById(`name${i}`).textContent = data[i].name;
+
+                    }
+                }
+            }
+            xhr.open("GET", "/Home/AjaxDemoData", true);
+            xhr.send();
+        }
+
+        function AddRows() {
+            let xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+                if (this.readyState === 4 && this.status === 200) {
+                    let data = JSON.parse(this.responseText);
+
+                    let table = document.getElementById("table");
+                    for (let i = 0; i < data.length; i++) {
+                        let tr = document.createElement("tr");
+                        let th = document.createElement("th");
+                        let td1 = document.createElement("td");
+                        let td2 = document.createElement("td");
+                        let td3 = document.createElement("td");
+
+                        th.textContent = index + 4;
+                        td1.textContent = data[i].name + index;
+                        td2.textContent = "Otto" + (index + 1);
+                        td3.textContent = data[i].date;
+                        index++;
+                        tr.appendChild(th);
+                        tr.appendChild(td1);
+                        tr.appendChild(td2);
+                        tr.appendChild(td3);
+
+                        table.appendChild(tr);
+                    }
+                }
+            }
+            xhr.open("GET", "/Home/AjaxDemoData", true);
+            xhr.send();
+        }
+
+        const table = `<table id="table" class="table table-hover">
+            <thead>
+            <tr>
+            <th scope="col">#</th>
+            <th scope="col">First</th>
+            <th scope="col">Last</th>
+            <th scope="col">Date</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+            <th scope="row">1</th>
+            <td id="name0">Mark</td>
+            <td>Otto</td>
+            <td id="date0">@DateTime.UtcNow.AddDays(-1).ToString("d")</td>
+            </tr>
+            <tr>
+            <th scope="row">2</th>
+            <td id="name1">Jacob</td>
+            <td>Thornton</td>
+            <td id="date1">@DateTime.UtcNow.AddDays(-1).ToString("d")</td>
+            </tr>
+            <tr>
+            <th scope="row">3</th>
+            <td id="name2">Larry</td>
+            <td>the Bird</td>
+            <td id="date2">@DateTime.UtcNow.AddDays(-1).ToString("d")</td>
+            </tr>
+            </tbody>
+            </table>
+            <div id="res"></div>`;
+
+        // Clear();
+
+        function Clear() {
+            container.innerHTML = table;
+        }
+
+        $(document).ready(function() {
+            container.innerHTML = table;
+        });
+
+        $(document).ready(function() {
+            $("thead").click(function() {
+                $.get("/Home/AjaxDemoData",
+                    function(data) {
+                        alert(`${data.map(x => `\n ${x.name} will work in: ${x.date}`)}`);
+                    });
+            });
+        });
+
+        function GitHub() {
+            $("#res").load("https://api.github.com/users/iltodbul");
+        }
+
+    </script>
+}

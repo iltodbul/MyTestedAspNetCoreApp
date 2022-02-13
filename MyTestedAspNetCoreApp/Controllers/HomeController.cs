@@ -1,6 +1,8 @@
 ﻿using System.Data;
+
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
+
 using MyTestedAspNetCoreApp.Data;
 using MyTestedAspNetCoreApp.Services;
 using MyTestedAspNetCoreApp.ViewModel.Home;
@@ -9,7 +11,9 @@ namespace MyTestedAspNetCoreApp.Controllers
 {
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
+
     using MyTestedAspNetCoreApp.Models;
+
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
@@ -28,7 +32,7 @@ namespace MyTestedAspNetCoreApp.Controllers
         private readonly IOptions<ErrorViewModel> _options;
 
         public HomeController(
-            ILogger<HomeController> logger, 
+            ILogger<HomeController> logger,
             ApplicationDbContext db,
             IShortStringService shortStringService,
             IConfiguration configuration,
@@ -75,6 +79,21 @@ namespace MyTestedAspNetCoreApp.Controllers
         public IActionResult StatusCodeError(int errorCode)
         {
             return this.View();
+        }
+
+        public IActionResult AjaxDemo()
+        {
+            return this.View();
+        }
+
+        public IActionResult AjaxDemoData()
+        {
+            return this.Json(new[]
+                {
+                   new {Name= "Pesho", Date= DateTime.UtcNow.ToString("d") },
+                   new {Name= "Gosho", Date= DateTime.UtcNow.AddDays(1).ToString("d") },
+                   new {Name= "Ivan", Date= DateTime.UtcNow.AddDays(2).ToString("d") },
+                });
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

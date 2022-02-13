@@ -20,7 +20,7 @@ namespace MyTestedAspNetCoreApp.ViewModel.Recipes
         [DataType(DataType.MultilineText)]
         public string Description { get; set; }
 
-        [MinToCurrentYear(1900, ErrorMessage = "Year must be between 1900 and current year")] // custom validation attribute
+        [MinToCurrentYear(1900)] // custom validation attribute
         public int Year { get; set; }
 
         [DataType(DataType.Date)]

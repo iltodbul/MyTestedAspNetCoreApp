@@ -28,6 +28,7 @@ namespace MyTestedAspNetCoreApp.Controllers
             {
                 Type = RecipeType.Unknown,
                 Date = DateTime.UtcNow,
+                Year = DateTime.UtcNow.Year,
                 Time = new RecipeTimeInputModel
                 {
                     CookingTime = 20,
