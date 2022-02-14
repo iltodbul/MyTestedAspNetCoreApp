@@ -34,9 +34,9 @@ namespace MyTestedAspNetCoreApp.Controllers
         }
 
         [HttpGet("{id}")]
-        public ActionResult<Product> GetById(int id)
+        public async Task<ActionResult<Product>> GetById(int id)
         {
-            var product = _dbContext.Products.Find(id);
+            var product = await this._dbContext.Products.FindAsync(id);
 
             if (product == null)
             {
@@ -64,7 +64,7 @@ namespace MyTestedAspNetCoreApp.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult> Update(Product product)
+        public async Task<IActionResult> Update(Product product)
         {
             this._dbContext.Products.Update(product);
             await this._dbContext.SaveChangesAsync();
@@ -73,7 +73,7 @@ namespace MyTestedAspNetCoreApp.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             var product = await this._dbContext.Products.FindAsync(id);
 
