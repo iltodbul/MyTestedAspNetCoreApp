@@ -1,6 +1,10 @@
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using MyTestedAspNetCoreApp.Services;
 using MyTestedAspNetCoreApp.Services.CustomMiddleware;
 using MyTestedAspNetCoreApp.Services.Filters;
+using MyTestedAspNetCoreApp.Settings;
 
 namespace MyTestedAspNetCoreApp
 {
@@ -31,13 +35,40 @@ namespace MyTestedAspNetCoreApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var jwtSettingsSection = Configuration.GetSection("JwtSettings");
+            services.Configure<JwtSettings>(jwtSettingsSection);
+
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
+
+            var jwtSettings = jwtSettingsSection.Get<JwtSettings>();
+            var key = Encoding.ASCII.GetBytes(jwtSettings.Secret);
+
+            services.AddAuthentication(option =>
+                {
+                    option.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    option.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                })
+                .AddJwtBearer(option =>
+                {
+                    option.RequireHttpsMetadata = false;
+                    option.SaveToken = true;
+                    option.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(key),
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                    };
+
+                });
+
             services.AddDatabaseDeveloperPageExceptionFilter();
 
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+
             services.AddControllersWithViews(configure =>
             {
                 //global registration :
@@ -48,7 +79,7 @@ namespace MyTestedAspNetCoreApp
                 configure.Filters.Add(new MyExceptionFilter());
                 configure.Filters.Add(new MyResultFilterAttribute());
 
-                // or local registration with attribute in the concrete controller or only in concrete action. In dis case in InfoController.
+                // or local registration with attribute in the concrete controller or only in concrete action. In this case in InfoController.
             });
             services.AddRazorPages();
             services.AddTransient<IShortStringService, ShortStringService>();
@@ -87,9 +118,9 @@ namespace MyTestedAspNetCoreApp
             
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllerRoute(
-                name: "areas",
-                pattern:"{area=exists}/{controller=Home}/{action=Index}/{id?}");
+                //endpoints.MapControllerRoute(
+                //name: "areas",
+                //pattern:"{area=exists}/{controller=Home}/{action=Index}/{id?}");
 
                 endpoints.MapControllerRoute(
                     name: "default",

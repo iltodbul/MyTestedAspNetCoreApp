@@ -87,6 +87,5 @@ namespace MyTestedAspNetCoreApp.Controllers
 
             return NoContent();
         }
-
     }
 }

@@ -10,6 +10,7 @@
     @* Linkvane na CSS za templeit *@
     <link rel="stylesheet" href="~/css/myCustomCss.css" />
     
+
 </head>
 <body>
     <header>
@@ -35,12 +36,12 @@
                             <a class="nav-link text-dark" asp-page="/ContactForm">Contact</a>
                         </li>
                         @RenderSection("Links", false)
-                        <li class="nav-item">
+                        @*<li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Exception">Throw Exception</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="StatusCodeError">Custom Error Page</a>
-                        </li>
+                        </li>*@
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>
