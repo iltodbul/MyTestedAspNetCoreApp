@@ -3,7 +3,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
-
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
@@ -59,6 +59,12 @@ namespace MyTestedAspNetCoreApp.Controllers
             var tokenAsString = tokenHandler.WriteToken(token);
 
             return new UserModel { Token = tokenAsString };
+        }
+
+        [Authorize]
+        public ActionResult<string> WhoAmI()
+        {
+            return User.Identity.Name;
         }
 
         public class LoginInputModel

@@ -63,6 +63,12 @@ namespace MyTestedAspNetCoreApp.Controllers
             return View(viewModel);
         }
 
+        [ValidateAntiForgeryToken]
+        public IActionResult GetData(string info)
+        {
+            return this.Content(info);
+        }
+
         public IActionResult Privacy()
         {
             var viewModel = new IndexViewModel

@@ -2,13 +2,17 @@
 @using MyTestedAspNetCoreApp.Services
 @using Microsoft.Extensions.Configuration
 @using Microsoft.Extensions.Options
+@using System.Text.Encodings.Web
 @model IndexViewModel
 @inject IShortStringService ShortString
 @inject IConfiguration Configuration
 @inject IOptions<ErrorViewModel> Options
+@inject UrlEncoder UrlEncoder
+@inject JavaScriptEncoder JsEncoder
 
 @{
     ViewData["Title"] = "Home Page";
+    var data = "<script> alert() </script>";
 }
 
 <h2>@this.Configuration["HalloMessage"]</h2>
@@ -18,10 +22,22 @@
 }
 <h1>This is from option value: @test.RequestId and @test.ShowRequestId</h1>
 
+@*Секюрити. За енкодване на данни:*@
+@*Проблем:*@ @*@Html.Raw(data)*@
+@*Решение на Проблема:*@
+@data
+@UrlEncoder.Encode(data)
+@JsEncoder.Encode(data)
+
 
 @*@await Html.PartialAsync("_HomePageStart")*@
 
 <partial name="_HomePageStart" />
+
+<form method="post" asp-action="GetData">
+    <input type="text" name="info"/>
+    <input type="submit" value="Click me" class="btn btn-danger"/>
+</form>
 
 
 <div class="text-center">

@@ -7,7 +7,7 @@
 
 <h1>Add recipes</h1>
 
-<form method="post" class="col-md-6" enctype="multipart/form-data">
+<form id="demo-form" method="post" class="col-md-6" enctype="multipart/form-data">
     <div class="d-flex flex-column">
         <div asp-validation-summary="All" class="text-danger"></div>
 
@@ -52,8 +52,13 @@
             <input asp-for="Image" class="form-control" />
             <span asp-validation-for="Image" class="text-danger"></span>
         </div>
+        
+        <input type="submit" class="btn btn-success"  />
 
-        <input type="submit" class="btn btn-success" />
+        @*<input type="submit" class="btn btn-success g-recaptcha"
+               data-sitekey="6LfyS4EeAAAAAIdF7wS7BTQkqXGN4xvli-JXzKxc"
+               data-callback='onSubmit'
+               data-action='submit' />*@
     </div>
 </form>
 
@@ -61,4 +66,12 @@
 @section Scripts
 {
     <partial name="_ValidationScriptsPartial" />
+
+    @*<script src="https://www.google.com/recaptcha/api.js"></script>
+
+    <script>
+        function onSubmit(token) {
+            document.getElementById("demo-form").submit();
+        }
+    </script>*@
 }

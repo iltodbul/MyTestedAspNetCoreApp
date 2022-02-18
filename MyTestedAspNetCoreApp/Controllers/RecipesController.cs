@@ -1,6 +1,8 @@
 ﻿using System.IO;
+
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+
 using MyTestedAspNetCoreApp.Models;
 using MyTestedAspNetCoreApp.ViewModel.Home.ViewComponents;
 using MyTestedAspNetCoreApp.ViewModel.Recipes;
@@ -48,12 +50,13 @@ namespace MyTestedAspNetCoreApp.Controllers
             }
 
             // TODO Save data in db
-
-            // запазване на файл в руут папката чрез стриим.
-            await using (FileStream fs = new FileStream(this._webHostEnvironment.WebRootPath + "/user.png", FileMode.Create))
+            if (model.Image != null)
             {
+                // запазване на файл в руут папката чрез стриим.
+                await using FileStream fs = new FileStream(this._webHostEnvironment.WebRootPath + "/user.png", FileMode.Create);
                 await model.Image.CopyToAsync(fs);
             }
+
 
             return this.RedirectToAction(nameof(ThankYou));
         }

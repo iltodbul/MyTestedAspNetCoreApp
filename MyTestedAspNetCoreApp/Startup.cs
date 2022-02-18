@@ -1,6 +1,9 @@
-using System.Text;
+﻿using System.Text;
+
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+
 using MyTestedAspNetCoreApp.Services;
 using MyTestedAspNetCoreApp.Services.CustomMiddleware;
 using MyTestedAspNetCoreApp.Services.Filters;
@@ -17,7 +20,9 @@ namespace MyTestedAspNetCoreApp
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
+
     using MyTestedAspNetCoreApp.Data;
+
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -47,8 +52,8 @@ namespace MyTestedAspNetCoreApp
 
             services.AddAuthentication(option =>
                 {
-                    option.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                    option.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                    //option.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    //option.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
                 })
                 .AddJwtBearer(option =>
                 {
@@ -66,11 +71,26 @@ namespace MyTestedAspNetCoreApp
 
             services.AddDatabaseDeveloperPageExceptionFilter();
 
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
+            services.AddDefaultIdentity<IdentityUser>(options =>
+                {
+                    // с цел дебъгване опростявам паролата и потвърждаването по имейл на акаунта.
+                    options.SignIn.RequireConfirmedAccount = false;
+                    options.Password.RequireDigit = false;
+                    options.Password.RequireLowercase = false;
+                    options.Password.RequiredLength = 6;
+                    options.Password.RequiredUniqueChars = 0;
+                    options.Password.RequireNonAlphanumeric = false;
+                    options.Password.RequireUppercase = false;
+                    // акаунта се заключва след 5 грешни опита за вхид.
+                    //options.Lockout.MaxFailedAccessAttempts = 5;
+                    // акаунта се заключва за 1 мин.при грешни опити за вхид.
+                    //options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(1);
+                })
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.AddControllersWithViews(configure =>
             {
+                configure.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
                 //global registration :
                 configure.Filters.Add(new MyAuthFilter());
                 configure.Filters.Add(new MyResourceFilter());
@@ -115,7 +135,7 @@ namespace MyTestedAspNetCoreApp
 
             app.UseAuthentication();
             app.UseAuthorization();
-            
+
             app.UseEndpoints(endpoints =>
             {
                 //endpoints.MapControllerRoute(

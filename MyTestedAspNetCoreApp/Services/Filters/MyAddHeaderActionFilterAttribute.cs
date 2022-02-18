@@ -17,7 +17,7 @@ namespace MyTestedAspNetCoreApp.Services.Filters
 
         public override void OnActionExecuted(ActionExecutedContext context)
         {
-            context.HttpContext.Response.Headers.Add("X-Info-Result-Type", context.Result.GetType().Name);
+            //context.HttpContext.Response.Headers.Add("X-Info-Result-Type", context.Result.GetType().Name);
         }
     }
 }
