@@ -53,6 +53,13 @@ namespace MyTestedAspNetCoreApp
             var jwtSettings = jwtSettingsSection.Get<JwtSettings>();
             var key = Encoding.ASCII.GetBytes(jwtSettings.Secret);
 
+            //login s Facebook
+            services.AddAuthentication().AddFacebook(options =>
+            {
+                options.AppId = "kopira se ot Facebook app for developers https://developers.facebook.com/docs/development/create-an-app";
+                options.AppSecret = "kopira se ot Facebook app for developers";
+            });
+
             services.AddAuthentication(option =>
                 {
                     //option.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -110,6 +117,7 @@ namespace MyTestedAspNetCoreApp
                 // or local registration with attribute in the concrete controller or only in concrete action. In this case in InfoController.
             });
             services.AddRazorPages();
+
             services.AddTransient<IShortStringService, ShortStringService>();
         }
 
