@@ -3,7 +3,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
-
+using MyTestedAspNetCoreApp.Models;
 using MyTestedAspNetCoreApp.Services;
 using MyTestedAspNetCoreApp.Services.CustomMiddleware;
 using MyTestedAspNetCoreApp.Services.Filters;
@@ -30,8 +30,11 @@ namespace MyTestedAspNetCoreApp
 
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        private readonly IWebHostEnvironment _env;
+
+        public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
+            _env = env;
             Configuration = configuration;
         }
 
@@ -71,13 +74,17 @@ namespace MyTestedAspNetCoreApp
 
             services.AddDatabaseDeveloperPageExceptionFilter();
 
-            services.AddDefaultIdentity<IdentityUser>(options =>
+            services.AddDefaultIdentity<ApplicationUser>(options =>
                 {
                     // с цел дебъгване опростявам паролата и потвърждаването по имейл на акаунта.
                     options.SignIn.RequireConfirmedAccount = false;
                     options.Password.RequireDigit = false;
                     options.Password.RequireLowercase = false;
                     options.Password.RequiredLength = 6;
+                    if (_env.IsProduction())
+                    {
+                        options.Password.RequiredLength = 10;
+                    }
                     options.Password.RequiredUniqueChars = 0;
                     options.Password.RequireNonAlphanumeric = false;
                     options.Password.RequireUppercase = false;
@@ -86,6 +93,7 @@ namespace MyTestedAspNetCoreApp
                     // акаунта се заключва за 1 мин.при грешни опити за вхид.
                     //options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(1);
                 })
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.AddControllersWithViews(configure =>
