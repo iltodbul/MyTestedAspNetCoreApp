@@ -27,6 +27,14 @@ namespace MyTestedAspNetCoreApp.ValidationAttributes
                 }
             }
 
+            if (value is DateTime dtValue)
+            {
+                if (dtValue.Year <= DateTime.UtcNow.Year && dtValue.Year >= MinValue)
+                {
+                    return true;
+                }
+            }
+
             return false;
         }
     }
