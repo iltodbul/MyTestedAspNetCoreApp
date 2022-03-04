@@ -64,7 +64,6 @@ namespace MyTestedAspNetCoreApp.Areas.Identity.Pages.Account
             public string ConfirmPassword { get; set; }
 
             [Required]
-            [MinToCurrentYear(1900)]
             public DateTime Birthday { get; set; }
         }
 
