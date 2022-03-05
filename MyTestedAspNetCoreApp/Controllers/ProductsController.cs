@@ -34,7 +34,7 @@ namespace MyTestedAspNetCoreApp.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Product>> GetById(int id)
+        public async Task<ActionResult<Product>> Get(int id)
         {
             var product = await this._dbContext.Products.FindAsync(id);
 
