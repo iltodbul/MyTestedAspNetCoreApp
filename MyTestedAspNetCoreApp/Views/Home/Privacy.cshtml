@@ -2,6 +2,7 @@
 @{
     ViewData["Title"] = "Privacy Policy";
 }
+
 <h1>@ViewData["Title"]</h1>
 
 <h3>
@@ -16,4 +17,11 @@
     <li class="nav-item">
         <a class="nav-link text-dark" href="https://google.com">Google</a>
     </li>
+}
+
+@section Scripts
+{
+    <script>
+        document.getElementsByTagName("p")[0].remove();
+    </script>
 }
